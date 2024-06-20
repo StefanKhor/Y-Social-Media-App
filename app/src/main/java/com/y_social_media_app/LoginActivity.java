@@ -9,18 +9,15 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.y_social_media_app.databinding.ActivityLoginBinding;
-import com.y_social_media_app.databinding.ActivityMainBinding;
 
 public class LoginActivity extends AppCompatActivity {
-    private ActivityLoginBinding binding;
+    private ActivityLoginBinding loginBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        binding = ActivityLoginBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-
-        
+        loginBinding = ActivityLoginBinding.inflate(getLayoutInflater());
+        setContentView(loginBinding.getRoot());
     }
 }
