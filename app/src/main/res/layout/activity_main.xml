@@ -6,37 +6,27 @@
     android:layout_height="match_parent"
     android:padding="22dp">
 
-    <!-- Y Logo   -->
-    <ImageView
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:contentDescription="@string/y_logo"
-        android:src="@drawable/y_logo"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        />
+<!--    &lt;!&ndash; Y Logo   &ndash;&gt;-->
+<!--    <ImageView-->
+<!--        android:layout_width="300dp"-->
+<!--        android:layout_height="300dp"-->
+<!--        android:contentDescription="@string/y_logo"-->
+<!--        android:src="@drawable/y_logo"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:layout_centerVertical="true"-->
+<!--        android:layout_marginTop="30dp"-->
+<!--        />-->
 
-    <!-- Register Button   -->
-    <Button
-        android:id="@+id/register_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:text="@string/register"
-        android:layout_marginBottom="20dp"
-        android:layout_above="@+id/login_button"
-    />
-
-    <!-- Login Button   -->
-    <Button
-        android:id="@+id/login_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:text="@string/login"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="120dp"
-    />
+<!--    &lt;!&ndash; Register Button   &ndash;&gt;-->
+<!--    <Button-->
+<!--        android:id="@+id/register_button"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:text="@string/register"-->
+<!--        android:layout_marginBottom="20dp"-->
+<!--        android:layout_above="@+id/login_button"-->
+<!--    />-->
 
 
 </RelativeLayout>
