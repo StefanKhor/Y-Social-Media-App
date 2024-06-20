@@ -6,15 +6,41 @@
     android:layout_height="match_parent"
     android:padding="22dp">
 
+    <!-- Y Logo   -->
     <ImageView
         android:layout_width="300dp"
         android:layout_height="300dp"
+        android:contentDescription="@string/y_logo"
         android:src="@drawable/y_logo"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
         />
 
+    <!-- Register Button   -->
+    <Button
+        android:id="@+id/register_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="@string/register"
+        android:layout_marginBottom="20dp"
+        android:layout_above="@+id/login_button"
+    />
+
+    <!-- Login Button   -->
+    <Button
+        android:id="@+id/login_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="@string/login"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="120dp"
+    />
+
+
 </RelativeLayout>
+
 <!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
 <!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
 <!--    android:id="@+id/container"-->
@@ -46,4 +72,4 @@
 <!--        app:layout_constraintTop_toTopOf="parent"-->
 <!--        app:navGraph="@navigation/mobile_navigation" />-->
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+<!--</androidx.constraintlayout.widget.ConstraintLayout>-->
