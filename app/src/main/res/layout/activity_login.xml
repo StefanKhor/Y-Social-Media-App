@@ -11,8 +11,8 @@
 
     <ImageView
         android:id="@+id/login_y_logo"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:contentDescription="@string/y_logo"
         android:src="@drawable/y_logo"
         android:layout_centerHorizontal="true"
