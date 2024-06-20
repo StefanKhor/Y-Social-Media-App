@@ -23,7 +23,7 @@ public class SplashScreen extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_splash_screen);
 
-//        getSupportActionBar().hide();
+        getSupportActionBar().hide();
 
         mAuth = FirebaseAuth.getInstance();
         if (mAuth != null) {
