@@ -126,7 +126,7 @@
         android:id="@+id/error_text_view"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:text="Email or password is incorrect"
+        android:text="@string/sign_in_error"
         android:textColor="#FF0000"
         android:visibility="invisible" />
     <!-- Login Button   -->
