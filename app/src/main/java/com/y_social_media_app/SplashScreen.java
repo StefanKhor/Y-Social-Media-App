@@ -6,9 +6,7 @@ import android.os.Handler;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -24,9 +22,8 @@ public class SplashScreen extends AppCompatActivity {
         setContentView(R.layout.activity_splash_screen);
 
         mAuth = FirebaseAuth.getInstance();
-        if (mAuth != null) {
-            currentUser = mAuth.getCurrentUser();
-        }
+        currentUser = mAuth.getCurrentUser();
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

@@ -26,7 +26,6 @@ import com.y_social_media_app.databinding.ActivityLoginBinding;
 public class LoginActivity extends AppCompatActivity {
     private ActivityLoginBinding loginBinding;
     private EditText email, password;
-    private Button loginButton, createAccButton;
     private FirebaseAuth mAuth;
 
     @Override
@@ -40,8 +39,8 @@ public class LoginActivity extends AppCompatActivity {
 
         email = loginBinding.emailInput;
         password = loginBinding.passwordInput;
-        loginButton = loginBinding.loginButton;
-        createAccButton = loginBinding.createAccountButton;
+        Button loginButton = loginBinding.loginButton;
+        Button createAccButton = loginBinding.createAccountButton;
 
         email.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,7 +104,6 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // If sign in success, redirect user to the dashboard
-                            FirebaseUser user = mAuth.getCurrentUser();
                             Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
                             startActivity(intent);
                         } else {
