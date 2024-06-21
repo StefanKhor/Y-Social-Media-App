@@ -1,5 +1,6 @@
 package com.y_social_media_app;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -88,7 +89,8 @@ public class ProfileFragment extends Fragment {
         binding.editProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(getActivity(), EditProfileActivity.class);
+                startActivity(intent);
             }
         });
 
