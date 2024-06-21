@@ -27,22 +27,22 @@ public class SplashScreen extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-//                FirebaseUser user = mAuth.getCurrentUser();
-//                if (user == null) {
-//                    Intent loginIntent = new Intent(SplashScreen.this, LoginActivity.class);
-//                    startActivity(loginIntent);
-//                    finish();
-//                } else {
-//                    Intent dashboardIntent = new Intent(SplashScreen.this, DashboardActivity.class);
-//                    dashboardIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                    startActivity(dashboardIntent);
-//                    finish();
-//                }
+                FirebaseUser user = mAuth.getCurrentUser();
+                if (user == null) {
+                    Intent loginIntent = new Intent(SplashScreen.this, LoginActivity.class);
+                    startActivity(loginIntent);
+                    finish();
+                } else {
+                    Intent dashboardIntent = new Intent(SplashScreen.this, DashboardActivity.class);
+                    dashboardIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(dashboardIntent);
+                    finish();
+                }
 
-                Intent dashboardIntent = new Intent(SplashScreen.this, DashboardActivity.class);
-                dashboardIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(dashboardIntent);
-                finish();
+//                Intent dashboardIntent = new Intent(SplashScreen.this, DashboardActivity.class);
+//                dashboardIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                startActivity(dashboardIntent);
+//                finish();
             }
         }, 1000);
     }
