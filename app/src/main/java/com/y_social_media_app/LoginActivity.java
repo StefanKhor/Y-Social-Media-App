@@ -1,15 +1,16 @@
 package com.y_social_media_app;
 
 import static android.view.View.VISIBLE;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -24,9 +25,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.y_social_media_app.databinding.ActivityLoginBinding;
 
 public class LoginActivity extends AppCompatActivity {
+
     private ActivityLoginBinding loginBinding;
     private EditText email, password;
     private FirebaseAuth mAuth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +119,4 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
     }
-
-
 }
