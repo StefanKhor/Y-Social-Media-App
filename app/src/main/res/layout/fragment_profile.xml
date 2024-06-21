@@ -5,10 +5,97 @@
     android:layout_height="match_parent"
     tools:context=".ProfileFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/profile_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="20sp"
+            >
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="120sp"
+                android:src="@drawable/y_logo"
+                />
+
+            <ImageView
+                android:id="@+id/profile_image"
+                android:layout_width="80sp"
+                android:layout_height="80sp"
+                android:src="@drawable/y_logo"
+                android:background="@drawable/border_image"
+                android:layout_marginTop="-100sp"
+                android:layout_marginStart="20sp"
+                android:layout_marginBottom="30sp"
+                android:importantForAccessibility="no" />
+
+            <TextView
+                android:id="@+id/profile_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mark Zukerbert"
+            />
+
+            <TextView
+                android:id="@+id/profile_handler"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="`@`markzukerbert"
+                android:layout_marginBottom="8sp"
+                />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/bio"
+                android:textStyle="bold"
+                android:textSize="16sp"
+            />
+
+            <TextView
+                android:id="@+id/profile_bio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/edit_profile"
+                android:layout_marginBottom="12sp"
+                />
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/black"
+                android:layout_marginBottom="15sp"
+            />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+            />
+
+        </LinearLayout>
+    </ScrollView>
+
+
+<!--    //    HashMap<Object, String> hashMap = new HashMap<>();-->
+<!--    //                        hashMap.put("email", email);-->
+<!--    //                        hashMap.put("uid", user.getUid());-->
+<!--    //                        hashMap.put("username", username);-->
+<!--    //                        hashMap.put("handler", username);-->
+<!--    //                        hashMap.put("bio", "");-->
+<!--    //                        hashMap.put("profileImageURL", "");-->
+<!--    //                        hashMap.put("coverImageURL", "");-->
 
 </FrameLayout>
