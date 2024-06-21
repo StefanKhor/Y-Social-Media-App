@@ -101,23 +101,26 @@ public class RegisterActivity extends AppCompatActivity {
         if (username.isEmpty()){
             // Username is empty
             Toast.makeText(RegisterActivity.this, "Username Must Not be Empty", Toast.LENGTH_SHORT).show();
+            binding.usernameInput.setError("Username Must Not be Empty");
             return false;
         }
         if (email.isEmpty()){
             // Email is empty
             Toast.makeText(RegisterActivity.this, "Email Must Not be Empty", Toast.LENGTH_SHORT).show();
+            binding.emailInput.setError("Email Must Not be Empty");
             return false;
         }
         if (password.isEmpty()){
             // Password is empty
             Toast.makeText(RegisterActivity.this, "Password Must Not be Empty", Toast.LENGTH_SHORT).show();
+            binding.passwordInput.setError("Password Must Not be Empty");
             return false;
         }
 
         if (password.length() < 8) {
-
             // Password is too short
             Toast.makeText(RegisterActivity.this,  " Password must be at least 8 characters long", Toast.LENGTH_SHORT).show();
+            binding.passwordInput.setError("Password must be at least 8 characters long");
             return false;
         }
         return true;
