@@ -1,5 +1,6 @@
 package com.y_social_media_app;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -48,11 +49,9 @@ public class DashboardActivity extends AppCompatActivity {
                     return true;
                 }
                 else if (menuItem.getItemId() == R.id.navigation_post){
-                    PostFragment postFragment = new PostFragment();
-                    FragmentTransaction postFragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    postFragmentTransaction.replace(R.id.content, postFragment);
-                    postFragmentTransaction.commit();
-                    return true;
+                    Intent intent = new Intent(DashboardActivity.this, CreatePostActivity.class);
+                    startActivity(intent);
+                    return false;
                 }
                 else if (menuItem.getItemId() == R.id.navigation_profile) {
                     ProfileFragment profileFragment = new ProfileFragment();
