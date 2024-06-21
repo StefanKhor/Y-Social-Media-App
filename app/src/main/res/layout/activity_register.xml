@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
     tools:context=".RegisterActivity"
-    android:padding="20dp">
+    android:padding="20dp"
+    >
 
 
     <ImageView
@@ -15,7 +18,6 @@
         android:layout_height="200dp"
         android:contentDescription="@string/y_logo"
         android:src="@drawable/y_logo"
-        android:layout_centerHorizontal="true"
 />
     <!-- Login Title -->
     <TextView
@@ -25,9 +27,8 @@
         android:text="@string/register"
         android:textStyle="bold"
         android:textSize="40sp"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:layout_below="@+id/login_y_logo"
+        android:layout_marginBottom="50dp"
         />
 
 
@@ -36,44 +37,51 @@
         android:id="@+id/username_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/email_input"
+        android:layout_marginBottom="30dp"
         android:autofillHints=""
         android:hint="@string/username"
         android:inputType="text"
-        android:layout_marginBottom="30dp"/>
+        android:minHeight="48dp" />
 
     <!-- Email Input-->
     <EditText
         android:id="@+id/email_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/password_input"
+        android:layout_marginBottom="30dp"
         android:autofillHints=""
         android:hint="@string/email"
         android:inputType="textEmailAddress"
-        android:layout_marginBottom="30dp"/>
+        android:minHeight="48dp" />
 
     <!-- Password Input   -->
-
     <EditText
         android:id="@+id/password_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/register_button"
         android:autofillHints=""
         android:hint="@string/password"
-        android:inputType="text|textPassword" />
+        android:inputType="text|textPassword"
+        android:minHeight="48dp" />
 
     <!-- Login Button   -->
     <Button
         android:id="@+id/register_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:text="@string/register"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="100dp"
         android:layout_marginTop="50dp"
+        android:layout_marginBottom="30dp"
         />
 
-</RelativeLayout>
+    <TextView
+        android:id="@+id/login_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Have Account? Login Now"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        />
+
+</LinearLayout>
