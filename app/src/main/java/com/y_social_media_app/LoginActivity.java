@@ -1,7 +1,9 @@
 package com.y_social_media_app;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,13 +14,27 @@ import androidx.core.view.WindowInsetsCompat;
 import com.y_social_media_app.databinding.ActivityLoginBinding;
 
 public class LoginActivity extends AppCompatActivity {
-    private ActivityLoginBinding loginBinding;
+    private ActivityLoginBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        loginBinding = ActivityLoginBinding.inflate(getLayoutInflater());
-        setContentView(loginBinding.getRoot());
+        binding = ActivityLoginBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        binding.registerText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navigateToRegister();
+            }
+        });
     }
+
+    private void navigateToRegister(){
+        Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
 }
