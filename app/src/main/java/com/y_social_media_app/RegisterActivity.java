@@ -76,8 +76,10 @@ public class RegisterActivity extends AppCompatActivity {
                         hashMap.put("email", email);
                         hashMap.put("uid", user.getUid());
                         hashMap.put("username", username);
+                        hashMap.put("handler", username);
                         hashMap.put("bio", "");
-                        hashMap.put("imageURL", "");
+                        hashMap.put("profileImageURL", "");
+                        hashMap.put("coverImageURL", "");
                         FirebaseDatabase database = FirebaseDatabase.getInstance();
                         DatabaseReference reference = database.getReference("Users");
                         reference.child(user.getUid()).setValue(hashMap);
@@ -123,6 +125,8 @@ public class RegisterActivity extends AppCompatActivity {
             binding.passwordInput.setError("Password must be at least 8 characters long");
             return false;
         }
+
+
         return true;
     }
 
