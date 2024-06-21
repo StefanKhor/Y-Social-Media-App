@@ -6,6 +6,8 @@
     <string name="y_logo">Y Logo</string>
     <string name="register">Register</string>
     <string name="login">Login</string>
+    <string name="sign_up_now">Don"'"t have an account? Sign Up</string>
+    <string name="sign_in_error">Email or password is incorrect</string>
     <string name="username">Username</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
