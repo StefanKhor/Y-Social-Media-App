@@ -1,4 +1,4 @@
-package com.y_social_media_app;
+package com.y_social_media_app.ui;
 
 import android.os.Bundle;
 
@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.y_social_media_app.R;
 
 /**
  * A simple {@link Fragment} subclass.

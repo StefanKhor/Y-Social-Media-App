@@ -1,4 +1,4 @@
-package com.y_social_media_app;
+package com.y_social_media_app.ui;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -21,8 +21,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.y_social_media_app.databinding.FragmentProfileBinding;
-
-import java.util.HashMap;
 
 public class ProfileFragment extends Fragment {
 

@@ -1,4 +1,4 @@
-package com.y_social_media_app;
+package com.y_social_media_app.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.y_social_media_app.R;
 
 public class SplashScreen extends AppCompatActivity {
 
