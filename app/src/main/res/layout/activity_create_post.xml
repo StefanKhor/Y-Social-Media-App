@@ -9,35 +9,47 @@
     android:padding="20dp"
     tools:context=".ui.CreatePostActivity">
 
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/create_post_title"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+    <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Post Title">
+        android:autofillHints=""
+        android:inputType="text"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:hint="@string/post_title"
+        />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints=""
+        android:inputType="text"
+        android:textSize="20sp"
+        android:hint="@string/post_description"
+        />
 
-    </com.google.android.material.textfield.TextInputLayout>
+    <ImageView
+        android:id="@+id/upload_image"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        />
 
-<!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:orientation="horizontal"-->
-<!--        >-->
-<!--        <Button-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="Cancel"-->
-<!--            />-->
-<!--        <Button-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="Post"/>-->
-<!--    </LinearLayout>-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <Button
+            android:id="@+id/cancel_post_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel"
+            />
+        <Button
+            android:id="@+id/post_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/submit_post"/>
+    </LinearLayout>
 
 </LinearLayout>
