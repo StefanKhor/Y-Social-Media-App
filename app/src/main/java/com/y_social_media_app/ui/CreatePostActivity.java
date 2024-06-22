@@ -83,10 +83,11 @@ public class CreatePostActivity extends AppCompatActivity {
     private void submitPost(){
         String title = binding.postTitleInput.getText().toString();
         String description = binding.postDescriptionInput.getText().toString();
-        final String timestamp = ServerValue.TIMESTAMP.toString();
         if(!validateForm(title, description)){
             return;
         }
+
+        final String timestamp = String.valueOf(System.currentTimeMillis());
 
         HashMap<Object, String> hashMap = new HashMap<>();
         hashMap.put("uid", firebaseUser.getUid());
@@ -100,19 +101,23 @@ public class CreatePostActivity extends AppCompatActivity {
 
         firebaseDatabase = FirebaseDatabase.getInstance("https://y-social-media-app-default-rtdb.asia-southeast1.firebasedatabase.app");
         databaseReference = firebaseDatabase.getReference("Posts");
-        databaseReference
-                .child(timestamp)
-                .setValue(hashMap)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        Toast.makeText(CreatePostActivity.this, "Post Successfully Uploaded", Toast.LENGTH_SHORT).show();
-                        binding.postTitleInput.setText("");
-                        binding.postDescriptionInput.setText("");
-                        finish();
-                    }
-                })
-                .addOnFailureListener(e -> Toast.makeText(CreatePostActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show());
+
+        String postID = databaseReference.push().getKey();
+        if (postID != null) {
+            databaseReference
+                    .child(postID)
+                    .setValue(hashMap)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            Toast.makeText(CreatePostActivity.this, "Post Successfully Uploaded", Toast.LENGTH_SHORT).show();
+                            binding.postTitleInput.setText("");
+                            binding.postDescriptionInput.setText("");
+                            finish();
+                        }
+                    })
+                    .addOnFailureListener(e -> Toast.makeText(CreatePostActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show());
+        }
     }
 
     private void pickImageDialog(){
