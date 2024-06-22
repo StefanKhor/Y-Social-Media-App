@@ -26,6 +26,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ServerValue;
 import com.y_social_media_app.databinding.ActivityCreatePostBinding;
 
 import java.util.HashMap;
@@ -82,7 +83,7 @@ public class CreatePostActivity extends AppCompatActivity {
     private void submitPost(){
         String title = binding.postTitleInput.getText().toString();
         String description = binding.postDescriptionInput.getText().toString();
-        final String timestamp = String.valueOf(System.currentTimeMillis());
+        final String timestamp = ServerValue.TIMESTAMP.toString();
         if(!validateForm(title, description)){
             return;
         }
