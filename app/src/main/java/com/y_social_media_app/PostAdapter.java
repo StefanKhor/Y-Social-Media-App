@@ -59,7 +59,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String username = snapshot.getValue(String.class);
-                Toast.makeText(context, username, Toast.LENGTH_SHORT).show();
                 holder.username.setText(username);
             }
 
@@ -69,18 +68,19 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 holder.username.setText("?????");
             }
         });
-        holder.username.setText(getUsername(model.getUid()));
 
-//        if (!model.getAuthorImage().isEmpty() || model.getAuthorImage() != null || !Objects.equals(model.getAuthorImage(), "")) {
-//            Glide.with(context)
-//                    .load(model.getAuthorImage())
-//                    .into(holder.profile_image);
-//        }
-        Glide.with(context)
-                .load(model.getAuthorImage())
-                .into(holder.profile_image);
-//        holder.profile_image.setImageResource(model.getAuthorImage());
-//        holder.post_image.setImageResource(model.getPost_image());
+        userRef.child(model.getUid()).child("profileImageURL").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String url = snapshot.getValue(String.class);
+                Glide.with(context).load(url).into(holder.profile_image);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
