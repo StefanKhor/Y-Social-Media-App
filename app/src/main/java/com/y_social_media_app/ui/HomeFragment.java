@@ -70,7 +70,7 @@ public class HomeFragment extends Fragment {
                             ModalPost modalPost = post.getValue(ModalPost.class);
                             allPosts.add(modalPost);
                             binding.homeRecyclerView.setAdapter(
-                                    new PostAdapter(getActivity(), allPosts) {
+                                    new PostAdapter(getContext(), allPosts) {
                                     }
                             );
                         }
