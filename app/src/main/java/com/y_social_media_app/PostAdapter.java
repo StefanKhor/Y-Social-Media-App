@@ -7,11 +7,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.y_social_media_app.ui.EditProfileActivity;
+
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Objects;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
+
+
 
     private final Context context;
     private final ArrayList<ModalPost> posts;
@@ -36,7 +52,33 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         ModalPost model = posts.get(position);
         holder.title.setText(model.getTitle());
         holder.description.setText(model.getDescription());
-        holder.timestamp.setText(model.getTimestamp());
+        holder.timestamp.setText(getTimeDate(model.getTimestamp()));
+
+        DatabaseReference userRef = FirebaseDatabase.getInstance("https://y-social-media-app-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("Users");
+        userRef.child(model.getUid()).child("username").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String username = snapshot.getValue(String.class);
+                Toast.makeText(context, username, Toast.LENGTH_SHORT).show();
+                holder.username.setText(username);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+                holder.username.setText("?????");
+            }
+        });
+        holder.username.setText(getUsername(model.getUid()));
+
+//        if (!model.getAuthorImage().isEmpty() || model.getAuthorImage() != null || !Objects.equals(model.getAuthorImage(), "")) {
+//            Glide.with(context)
+//                    .load(model.getAuthorImage())
+//                    .into(holder.profile_image);
+//        }
+        Glide.with(context)
+                .load(model.getAuthorImage())
+                .into(holder.profile_image);
 //        holder.profile_image.setImageResource(model.getAuthorImage());
 //        holder.post_image.setImageResource(model.getPost_image());
     }
@@ -50,15 +92,31 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     // View holder class for initializing of your views such as TextView and Imageview
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final ImageView profile_image, post_image;
-        private final TextView title, description, timestamp;
+        private final TextView title, description, timestamp, username;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             profile_image = itemView.findViewById(R.id.post_profile_image);
             post_image = itemView.findViewById(R.id.post_profile_image);
+            username = itemView.findViewById(R.id.post_username);
             title = itemView.findViewById(R.id.post_title);
             description = itemView.findViewById(R.id.post_description);
             timestamp = itemView.findViewById(R.id.post_timestamp);
         }
+    }
+
+    private String getTimeDate(String timestamp){
+        try{
+            long data = Long.parseLong(timestamp);
+            DateFormat dateFormat = DateFormat.getDateTimeInstance();
+            Date netDate = (new Date(data));
+            return dateFormat.format(netDate);
+        } catch(Exception e) {
+            return "date";
+        }
+    }
+
+    public static class UserClass{
+        public static String username;
     }
 }
