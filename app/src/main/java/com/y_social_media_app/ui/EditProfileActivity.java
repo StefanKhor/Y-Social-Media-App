@@ -1,15 +1,23 @@
 package com.y_social_media_app.ui;
 
+import static android.content.ContentValues.TAG;
+import static android.util.Log.println;
 import static java.security.AccessController.getContext;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,6 +26,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -27,6 +39,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.y_social_media_app.R;
+import com.y_social_media_app.databinding.ActivityEditProfileBinding;
 
 public class EditProfileActivity extends AppCompatActivity {
 
@@ -46,6 +59,7 @@ public class EditProfileActivity extends AppCompatActivity {
     String cameraPermission[];
     String storagePermission[];
     Uri profileImageUri, coverImageUri;
+    ProgressDialog progressDialog;
 
 
     @Override
@@ -62,10 +76,29 @@ public class EditProfileActivity extends AppCompatActivity {
 
         editPasswordBtn = findViewById(R.id.update_password_button);
         saveBtn = findViewById(R.id.edit_profile_button);
-
+        progressDialog = new ProgressDialog(this);
 
         firebaseUser = firebaseAuth.getCurrentUser();
         databaseReference = firebaseDatabase.getReference("Users");
+
+        listenerSetup();
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        listenerSetup();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        listenerSetup();
+    }
+
+
+    private void listenerSetup() {
         Query query = databaseReference.child(firebaseUser.getUid());
 
         query.addValueEventListener(new ValueEventListener() {
@@ -100,6 +133,14 @@ public class EditProfileActivity extends AppCompatActivity {
 
         });
 
+        editPasswordBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                progressDialog.setMessage("Update Password");
+                displayUpdatePasswordDialog();
+            }
+        });
+
         profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,8 +161,88 @@ public class EditProfileActivity extends AppCompatActivity {
 
             }
         });
+    }
 
+    private void displayUpdatePasswordDialog() {
+        View view = LayoutInflater.from(this).inflate(R.layout.change_password_dialog, null);
+        final EditText currentPassword = view.findViewById(R.id.current_password_edit_text);
+        final EditText newPassword = view.findViewById(R.id.new_password_edit_text);
+        final EditText confirmPassword = view.findViewById(R.id.confirm_password_edit_text);
+        Button updatePasswordBtn = view.findViewById(R.id.update_password_button);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(view);
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+        updatePasswordBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean isValid = true;
+                String currentPass = currentPassword.getText().toString();
+                String newPass = newPassword.getText().toString();
+                String confirmPass = confirmPassword.getText().toString();
+
+
+                if (currentPass.isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                    currentPassword.setError("Please enter your current password");
+                    isValid = false;
+
+                }
+
+                if (newPass.length() < 8) {
+                    newPassword.setError("Password must be at least 8 characters");
+                    isValid = false;
+                }
+
+                if (!newPass.equals(confirmPass)) {
+                    confirmPassword.setError("Passwords do not match");
+                    isValid = false;
+                }
+
+                if (confirmPass.isEmpty()) {
+                    confirmPassword.setError("Password must be at least 8 characters");
+                    isValid = false;
+                }
+
+                if (isValid) {
+                    ProgressBar progressBar = view.findViewById(R.id.progressBar_cyclic);
+                    progressBar.setVisibility(View.VISIBLE);
+                    updatePassword(currentPass, newPass);
+                    progressBar.setVisibility(View.INVISIBLE);
+                    dialog.dismiss();
+                }
+
+
+            }
+        });
 
     }
+
+    private void updatePassword(String currentPass, String newPass) {
+        firebaseUser = firebaseAuth.getCurrentUser();
+        AuthCredential credential = EmailAuthProvider.getCredential(firebaseUser.getEmail(), currentPass);
+        firebaseUser.reauthenticate(credential)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            firebaseUser.updatePassword(newPass).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(getApplicationContext(), "Password Updated Successfully", Toast.LENGTH_LONG).show();
+                                    } else {
+                                        Toast.makeText(getApplicationContext(), "Update Password Failed", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Update Password Failed", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
 
 }
