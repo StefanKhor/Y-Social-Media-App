@@ -4,6 +4,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.y_social_media_app.ModalPost;
+import com.y_social_media_app.PostAdapter;
 import com.y_social_media_app.R;
 import com.y_social_media_app.databinding.FragmentHomeBinding;
 import com.y_social_media_app.databinding.FragmentProfileBinding;
@@ -45,24 +48,31 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(getLayoutInflater());
 
-
+        // Initialize RecyclerView and set LayoutManager
+        RecyclerView recyclerView = binding.homeRecyclerView;
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        allPosts = new ArrayList<>();
+        loadPost();
         // Inflate the layout for this fragment
         return binding.getRoot();
     }
     private void loadPost(){
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance("https://y-social-media-app-default-rtdb.asia-southeast1.firebasedatabase.app");
-        DatabaseReference databaseReference = firebaseDatabase.getReference("Posts");
+        DatabaseReference postsRef = firebaseDatabase.getReference("Posts");
 
-        databaseReference
-                .addValueEventListener(new ValueEventListener() {
+        Query query = postsRef.orderByChild("timestamp");
+        query.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
+
                         for (DataSnapshot post: snapshot.getChildren()){
+                            System.out.println(post.toString());
                             ModalPost modalPost = post.getValue(ModalPost.class);
                             allPosts.add(modalPost);
-//                            binding.homeRecyclerView.setAdapter(
-//                                    new AdapterPost(getActivity(), allPosts)
-//                            );
+                            binding.homeRecyclerView.setAdapter(
+                                    new PostAdapter(getActivity(), allPosts) {
+                                    }
+                            );
                         }
                     }
 
@@ -70,16 +80,9 @@ public class HomeFragment extends Fragment {
                     public void onCancelled(@NonNull DatabaseError error) {
                         Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
+
+
                 });
 
-    }
-    private String getTimeDate(long timestamp){
-        try{
-            DateFormat dateFormat = DateFormat.getDateTimeInstance();
-            Date netDate = (new Date(timestamp));
-            return dateFormat.format(netDate);
-        } catch(Exception e) {
-            return "date";
-        }
     }
 }
