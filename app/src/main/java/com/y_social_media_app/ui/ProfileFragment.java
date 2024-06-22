@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -67,12 +68,16 @@ public class ProfileFragment extends Fragment {
                     if (!bio.isEmpty()){
                         binding.profileBio.setText(bio);
                     }
-                    if (!profileImageURL.isEmpty()){
-                        binding.profileImage.setImageURI(null);
-                        binding.profileImage.setImageURI(Uri.parse(profileImageURL));
+                    if (!profileImageURL.isEmpty()) {
+                        Glide.with(ProfileFragment.this)
+                                .load(profileImageURL)
+                                .into(binding.profileFragmentProfileImage);
                     }
-                    if (!coverImageURL.isEmpty()){
-                        binding.profileCoverImage.setImageURI(Uri.parse(coverImageURL));
+
+                    if (!coverImageURL.isEmpty()) {
+                        Glide.with(ProfileFragment.this)
+                                .load(coverImageURL)
+                                .into(binding.profileFragmentProfileCoverImage);
                     }
                 }
             }
@@ -89,7 +94,6 @@ public class ProfileFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), EditProfileActivity.class);
                 startActivity(intent);
-                getActivity().finish();
             }
         });
 
