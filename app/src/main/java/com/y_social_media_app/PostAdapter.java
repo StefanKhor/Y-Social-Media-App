@@ -11,15 +11,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
-public abstract class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
+public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
     private final Context context;
-    private final ArrayList<ModalPost> postAdapterArrayList;
+    private final ArrayList<ModalPost> posts;
 
     // Constructor
     public PostAdapter(Context context, ArrayList<ModalPost> posts) {
         this.context = context;
-        this.postAdapterArrayList = posts;
+        this.posts = posts;
     }
 
     @NonNull
@@ -33,7 +33,7 @@ public abstract class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewH
     @Override
     public void onBindViewHolder(@NonNull PostAdapter.ViewHolder holder, int position) {
         // to set data to textview and imageview of each card layout
-        ModalPost model = postAdapterArrayList.get(position);
+        ModalPost model = posts.get(position);
         holder.title.setText(model.getTitle());
         holder.description.setText(model.getDescription());
         holder.timestamp.setText(model.getTimestamp());
@@ -44,7 +44,7 @@ public abstract class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewH
     @Override
     public int getItemCount() {
         // this method is used for showing number of card items in recycler view
-        return postAdapterArrayList.size();
+        return posts.size();
     }
 
     // View holder class for initializing of your views such as TextView and Imageview
