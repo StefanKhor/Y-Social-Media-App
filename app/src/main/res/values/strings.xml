@@ -14,5 +14,9 @@
     <string name="hello_blank_fragment">Hello </string>
     <!-- For Pfofile Page String    -->
     <string name="bio">Bio</string>
-    <string name="edit_profile">Edit Profile</string>"
+    <string name="edit_profile">Edit Profile</string>
+    <string name="post_title">Post Title</string>
+    <string name="post_description">Post Description</string>
+    <string name="submit_post">Post</string>
+    <string name="cancel">Cancel</string>
 </resources>
