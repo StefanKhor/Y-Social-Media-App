@@ -108,6 +108,7 @@ public class LoginActivity extends AppCompatActivity {
                             // If sign in success, redirect user to the dashboard
                             Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
                             startActivity(intent);
+                            finish();
                         } else {
                             // If sign in fail, display error message
                             Toast.makeText(LoginActivity.this, "Failed to sign in",
