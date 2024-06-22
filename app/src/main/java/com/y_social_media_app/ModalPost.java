@@ -48,15 +48,6 @@ public class ModalPost {
         this.timestamp = timestamp;
     }
 
-    String authorImage;
-
-    public String getAuthorImage() {
-        return authorImage;
-    }
-
-    public void setAuthorImage(String authorImage) {
-        this.authorImage = authorImage;
-    }
 
     String postImage;
 
