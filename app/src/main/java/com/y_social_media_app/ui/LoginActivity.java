@@ -1,4 +1,4 @@
-package com.y_social_media_app;
+package com.y_social_media_app.ui;
 
 import static android.view.View.VISIBLE;
 import android.content.Intent;
@@ -21,7 +21,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.y_social_media_app.databinding.ActivityLoginBinding;
 
 public class LoginActivity extends AppCompatActivity {
