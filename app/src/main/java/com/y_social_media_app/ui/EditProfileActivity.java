@@ -1,18 +1,13 @@
 package com.y_social_media_app.ui;
 
-import static android.content.ContentValues.TAG;
-import static android.util.Log.println;
-import static java.security.AccessController.getContext;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
+
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
+
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,7 +16,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
+import androidx.annotation.Nullable;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 
@@ -39,7 +35,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.y_social_media_app.R;
-import com.y_social_media_app.databinding.ActivityEditProfileBinding;
 
 public class EditProfileActivity extends AppCompatActivity {
 
@@ -49,17 +44,12 @@ public class EditProfileActivity extends AppCompatActivity {
     DatabaseReference databaseReference;
 //    StorageRefence storageRefence;
     String storagepath = "";
-    ImageView profileImage, coverImgage;
+    ImageView profileImage, coverImage;
     EditText username, bio;
     Button editPasswordBtn, saveBtn;
-    private static final int CAMERA_REQUEST = 100;
-    private static final int STORAGE_REQUEST = 200;
-    private static final int IMAGEPICK_GALLERY_REQUEST = 300;
-    private static final int IMAGE_PICKCAMERA_REQUEST = 400;
-    String cameraPermission[];
-    String storagePermission[];
+    private static final int PROFILE_IMAGEPICK_GALLERY_REQUEST = 3000;
+    private static final int COVER_IMAGEPICK_GALLERY_REQUEST = 3001;
     Uri profileImageUri, coverImageUri;
-    ProgressDialog progressDialog;
 
 
     @Override
@@ -70,13 +60,12 @@ public class EditProfileActivity extends AppCompatActivity {
         firebaseDatabase = FirebaseDatabase.getInstance("https://y-social-media-app-default-rtdb.asia-southeast1.firebasedatabase.app");
 
         profileImage = findViewById(R.id.profile_image);
-        coverImgage = findViewById(R.id.profile_cover_image);
+        coverImage = findViewById(R.id.profile_cover_image);
         username = findViewById(R.id.edit_username);
         bio = findViewById(R.id.edit_bio);
 
         editPasswordBtn = findViewById(R.id.update_password_button);
         saveBtn = findViewById(R.id.edit_profile_button);
-        progressDialog = new ProgressDialog(this);
 
         firebaseUser = firebaseAuth.getCurrentUser();
         databaseReference = firebaseDatabase.getReference("Users");
@@ -84,19 +73,6 @@ public class EditProfileActivity extends AppCompatActivity {
         listenerSetup();
 
     }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        listenerSetup();
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        listenerSetup();
-    }
-
 
     private void listenerSetup() {
         Query query = databaseReference.child(firebaseUser.getUid());
@@ -120,7 +96,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     if (!coverImageURL.isEmpty()) {
                         Glide.with(EditProfileActivity.this)
                                 .load(coverImageURL)
-                                .into(coverImgage);
+                                .into(coverImage);
                     }
                 }
             }
@@ -136,7 +112,6 @@ public class EditProfileActivity extends AppCompatActivity {
         editPasswordBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressDialog.setMessage("Update Password");
                 displayUpdatePasswordDialog();
             }
         });
@@ -145,23 +120,84 @@ public class EditProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Choose a profile image
+                openFileChooser("ProfileImage");
             }
         });
 
-        coverImgage.setOnClickListener(new View.OnClickListener() {
+        coverImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                openFileChooser("CoverImage");
             }
         });
 
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String usernameString = username.getText().toString().trim();
+                String bioString = bio.getText().toString().trim();
+                DatabaseReference ref = databaseReference.child(firebaseUser.getUid());
+                ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        ref.child("username").setValue(usernameString);
+                        ref.child("bio").setValue(bioString);
+
+                        if (profileImageUri != null) {
+                            // Add to storage
+
+                            // Add to database
+//                            ref.child("profileImageURL").setValue(profileImageUri);
+                        }
+                        if (coverImageUri != null) {
+//                            ref.child("coverImageURL").setValue(coverImageUri);
+                        }
+
+                        Toast.makeText(getApplicationContext(), "Profile Updated", Toast.LENGTH_LONG).show();
+                        finish();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
 
             }
         });
     }
+
+    private void openFileChooser(String type) {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        if (type.equals("ProfileImage")) {
+            startActivityForResult(intent,PROFILE_IMAGEPICK_GALLERY_REQUEST);
+        }
+        if (type.equals("CoverImage")) {
+            startActivityForResult(intent,COVER_IMAGEPICK_GALLERY_REQUEST);
+        }
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
+        if (requestCode == PROFILE_IMAGEPICK_GALLERY_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null){
+            profileImageUri = data.getData();
+            profileImage.setImageURI(profileImageUri);
+        }
+
+        if (requestCode == COVER_IMAGEPICK_GALLERY_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null){
+            coverImageUri = data.getData();
+            coverImage.setImageURI(coverImageUri);
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
 
     private void displayUpdatePasswordDialog() {
         View view = LayoutInflater.from(this).inflate(R.layout.change_password_dialog, null);
