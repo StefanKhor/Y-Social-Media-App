@@ -1,10 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/profile"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.EditProfileActivity">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <ImageView
+        android:id="@+id/profile_cover_image"
+        android:layout_width="match_parent"
+        android:layout_height="180sp"
+        android:background="@color/gray"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/black"
+        />
+
+
+    <ImageView
+        android:id="@+id/profile_image"
+        android:layout_width="80sp"
+        android:layout_height="80sp"
+        android:src="@drawable/y_logo"
+        android:background="@drawable/border_image"
+        android:layout_marginTop="-40sp"
+        android:layout_marginStart="20sp"
+        android:layout_marginBottom="30sp"
+        android:importantForAccessibility="no" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="20sp"
+        android:paddingEnd="20sp">
+        <TextView
+            android:id="@+id/profile_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Username"
+            />
+
+        <EditText
+            android:id="@+id/edit_username"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:ems="10"
+            android:inputType="text"
+            android:text=""
+            android:hint="Update Username"/>
+
+        <TextView
+            android:id="@+id/profile_bio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8sp"
+            android:text="Bio"
+            />
+
+        <EditText
+            android:id="@+id/edit_bio"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:ems="10"
+            android:gravity="start|top"
+            android:inputType="textMultiLine"
+            android:hint="Update Bio"/>
+
+        <Button
+            android:id="@+id/update_password_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Edit Password"
+            android:layout_marginBottom="12sp"
+        />
+
+        <Button
+            android:id="@+id/edit_profile_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save"
+            android:layout_marginBottom="12sp"
+            />
+    </LinearLayout>
+
+</LinearLayout>
