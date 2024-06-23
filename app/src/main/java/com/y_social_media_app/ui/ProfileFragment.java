@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +23,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.y_social_media_app.ModalPost;
+import com.y_social_media_app.PostAdapter;
 import com.y_social_media_app.databinding.FragmentProfileBinding;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class ProfileFragment extends Fragment {
 
@@ -31,6 +39,8 @@ public class ProfileFragment extends Fragment {
     DatabaseReference databaseReference;
 
     private FragmentProfileBinding binding;
+
+    ArrayList<ModalPost> allPosts;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -97,6 +107,59 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        // Initialize RecyclerView and set LayoutManager
+        RecyclerView recyclerView = binding.ownPostRecyclerview;
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        allPosts = new ArrayList<>();
+        getOwnPost();
+
         return binding.getRoot();
+    }
+
+
+    private void getOwnPost(){
+        binding.ownPostProgressBar.setVisibility(View.VISIBLE);
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance("https://y-social-media-app-default-rtdb.asia-southeast1.firebasedatabase.app");
+        DatabaseReference postsRef = firebaseDatabase.getReference("Posts");
+        String uid = firebaseUser.getUid();
+
+        Query query = postsRef.orderByChild("uid").equalTo(uid);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<ModalPost> allPosts = new ArrayList<>();
+
+                // Iterate through the filtered results and add to allPosts
+                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                    ModalPost modalPost = postSnapshot.getValue(ModalPost.class);
+                    allPosts.add(modalPost);
+                }
+
+//                Sort manually
+                allPosts.sort(new Comparator<ModalPost>() {
+                    @Override
+                    public int compare(ModalPost post1, ModalPost post2) {
+                        // Parse timestamp strings to long
+                        long timestamp1 = Long.parseLong(post1.getTimestamp());
+                        long timestamp2 = Long.parseLong(post2.getTimestamp());
+
+                        // Compare timestamps in descending order (latest first)
+                        return Long.compare(timestamp2, timestamp1);                    }
+                });
+
+                // Set the adapter to your RecyclerView
+                PostAdapter adapter = new PostAdapter(getActivity(), allPosts);
+                binding.ownPostProgressBar.setVisibility(View.GONE);
+                binding.ownPostRecyclerview.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                binding.ownPostProgressBar.setVisibility(View.GONE);
+                Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
     }
 }
