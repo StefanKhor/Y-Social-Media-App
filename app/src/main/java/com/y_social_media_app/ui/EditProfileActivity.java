@@ -1,7 +1,6 @@
 package com.y_social_media_app.ui;
 
 
-import android.app.Activity;
 import android.app.AlertDialog;
 
 import android.content.Intent;
@@ -24,7 +23,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
@@ -36,9 +34,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.y_social_media_app.R;
 
 public class EditProfileActivity extends AppCompatActivity {
@@ -47,7 +42,8 @@ public class EditProfileActivity extends AppCompatActivity {
     FirebaseUser firebaseUser;
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
-    StorageReference storageRefence, ref2, ref3;
+//    StorageRefence storageRefence;
+    String storagepath = "";
     ImageView profileImage, coverImage;
     EditText username, bio;
     Button editPasswordBtn, saveBtn;
@@ -73,7 +69,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
         firebaseUser = firebaseAuth.getCurrentUser();
         databaseReference = firebaseDatabase.getReference("Users");
-        storageRefence = FirebaseStorage.getInstance("gs://y-social-media-app.appspot.com").getReference();
+
         listenerSetup();
 
     }
@@ -84,9 +80,6 @@ public class EditProfileActivity extends AppCompatActivity {
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (getApplicationContext() == null) {
-                    return;
-                }
                 if (dataSnapshot.exists()) {
 //                  //  Get data from database
                     String profileImageURL = "" + dataSnapshot.child("profileImageURL").getValue();
@@ -152,41 +145,15 @@ public class EditProfileActivity extends AppCompatActivity {
 
                         if (profileImageUri != null) {
                             // Add to storage
-                            ref2 = storageRefence.child("users/" + firebaseUser.getUid() + "/profileImage");
-                            ref2.putFile(profileImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
 
-                                @Override
-                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                    ref2.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                        @Override
-                                        public void onSuccess(Uri uri) {
-                                            // Add to database
-                                            ref.child("profileImageURL").setValue(uri.toString());
-                                        }
-                                    });
-                                }});
+                            // Add to database
+//                            ref.child("profileImageURL").setValue(profileImageUri);
                         }
                         if (coverImageUri != null) {
-                            ref3 = storageRefence.child("users/" + firebaseUser.getUid() + "/coverImage");
-                            ref3.putFile(coverImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-
-                                @Override
-                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                    ref3.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                        @Override
-                                        public void onSuccess(Uri uri) {
-                                            // Add to database
-                                            ref.child("coverImageURL").setValue(uri.toString());
-                                        }
-                                    });
-                                }});
+//                            ref.child("coverImageURL").setValue(coverImageUri);
                         }
 
                         Toast.makeText(getApplicationContext(), "Profile Updated", Toast.LENGTH_LONG).show();
-//                        Intent intent = new Intent(EditProfileActivity.this, DashboardActivity.class);
-//                        startActivity(intent);
-//                        finish();
-                        setResult(Activity.RESULT_OK);
                         finish();
                     }
 
