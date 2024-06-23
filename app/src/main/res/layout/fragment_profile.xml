@@ -86,22 +86,29 @@
                 android:layout_marginBottom="15sp"
             />
 
-            <androidx.recyclerview.widget.RecyclerView
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-            />
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/own_post_recyclerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <ProgressBar
+                    android:id="@+id/own_post_progressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
     </ScrollView>
-
-
-<!--    //    HashMap<Object, String> hashMap = new HashMap<>();-->
-<!--    //                        hashMap.put("email", email);-->
-<!--    //                        hashMap.put("uid", user.getUid());-->
-<!--    //                        hashMap.put("username", username);-->
-<!--    //                        hashMap.put("handler", username);-->
-<!--    //                        hashMap.put("bio", "");-->
-<!--    //                        hashMap.put("profileImageURL", "");-->
-<!--    //                        hashMap.put("coverImageURL", "");-->
 
 </FrameLayout>
