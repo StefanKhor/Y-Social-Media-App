@@ -1,10 +1,12 @@
 package com.y_social_media_app.ui;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -58,55 +60,14 @@ public class ProfileFragment extends Fragment {
         firebaseDatabase = FirebaseDatabase.getInstance("https://y-social-media-app-default-rtdb.asia-southeast1.firebasedatabase.app");
         databaseReference = firebaseDatabase.getReference("Users");
 
-//        Query and get information from firebase database
-        Query query = databaseReference.child(firebaseUser.getUid());
-
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
-//                  //  Get data from database
-                    String username = "" + dataSnapshot.child("username").getValue();
-                    String handler = "" + dataSnapshot.child("handler").getValue();
-                    String bio = "" + dataSnapshot.child("bio").getValue();
-                    String profileImageURL = "" + dataSnapshot.child("profileImageURL").getValue();
-                    String coverImageURL = "" + dataSnapshot.child("coverImageURL").getValue();
-
-                    binding.profileUsername.setText(username);
-                    binding.profileHandler.setText(handler);
-
-                    if (!bio.isEmpty()){
-                        binding.profileBio.setText(bio);
-                    }
-                    if (!profileImageURL.isEmpty()) {
-                        Glide.with(ProfileFragment.this)
-                                .load(profileImageURL)
-                                .into(binding.profileFragmentProfileImage);
-                    }
-
-                    if (!coverImageURL.isEmpty()) {
-                        Glide.with(ProfileFragment.this)
-                                .load(coverImageURL)
-                                .into(binding.profileFragmentProfileCoverImage);
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-//                handle any error
-                Toast.makeText(getContext(), "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-
         binding.editProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), EditProfileActivity.class);
-                startActivity(intent);
+                openEditProfile();
             }
         });
 
+        refreshProfileData();
         binding.logoutButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -117,6 +78,7 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+
         // Initialize RecyclerView and set LayoutManager
         RecyclerView recyclerView = binding.ownPostRecyclerview;
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -126,6 +88,67 @@ public class ProfileFragment extends Fragment {
         return binding.getRoot();
     }
 
+    private void refreshProfileData() {
+        if (firebaseUser != null) {
+            // Query and get information from firebase database
+            Query query = databaseReference.child(firebaseUser.getUid());
+
+            query.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (getActivity() == null) {
+                        return;
+                    }
+                    if (dataSnapshot.exists()){
+//                  //  Get data from database
+                        String username = "" + dataSnapshot.child("username").getValue();
+                        String handler = "" + dataSnapshot.child("handler").getValue();
+                        String bio = "" + dataSnapshot.child("bio").getValue();
+                        String profileImageURL = "" + dataSnapshot.child("profileImageURL").getValue();
+                        String coverImageURL = "" + dataSnapshot.child("coverImageURL").getValue();
+
+                        binding.profileUsername.setText(username);
+                        binding.profileHandler.setText(handler);
+
+                        if (!bio.isEmpty()){
+                            binding.profileBio.setText(bio);
+                        }
+                        if (!profileImageURL.isEmpty()) {
+                            Glide.with(ProfileFragment.this)
+                                    .load(profileImageURL)
+                                    .into(binding.profileFragmentProfileImage);
+                        }
+
+                        if (!coverImageURL.isEmpty()) {
+                            Glide.with(ProfileFragment.this)
+                                    .load(coverImageURL)
+                                    .into(binding.profileFragmentProfileCoverImage);
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+//                handle any error
+                    Toast.makeText(getContext(), "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+    private void openEditProfile() {
+        Intent intent = new Intent(getActivity(), EditProfileActivity.class);
+        startActivityForResult(intent, 101);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 101 && resultCode == Activity.RESULT_OK) {
+            // Refresh profile data
+            refreshProfileData();
+        }
+    }
 
     private void getOwnPost(){
         binding.ownPostProgressBar.setVisibility(View.VISIBLE);
@@ -137,6 +160,9 @@ public class ProfileFragment extends Fragment {
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (getActivity() == null) {
+                    return;
+                }
                 ArrayList<ModalPost> allPosts = new ArrayList<>();
 
                 // Iterate through the filtered results and add to allPosts
