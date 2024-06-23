@@ -20,5 +20,7 @@
     <string name="submit_post">Post</string>
     <string name="cancel">Cancel</string>
     <string name="post">Create Post</string>
+    <string name="optional">Optional</string>
+    <string name="upload_image_text">You may upload your image here</string>
 
 </resources>
