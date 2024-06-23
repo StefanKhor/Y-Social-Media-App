@@ -81,6 +81,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+
+        if(model.getPostImage() == null || model.getPostImage().equals("NoImage") || model.getPostImage().isEmpty()){
+            holder.post_image.setVisibility(View.GONE);
+        } else {
+            Glide.with(context).load(model.getPostImage()).into(holder.post_image);
+            holder.post_image.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -97,7 +104,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             profile_image = itemView.findViewById(R.id.post_profile_image);
-            post_image = itemView.findViewById(R.id.post_profile_image);
+            post_image = itemView.findViewById(R.id.post_image);
             username = itemView.findViewById(R.id.post_username);
             title = itemView.findViewById(R.id.post_title);
             description = itemView.findViewById(R.id.post_description);

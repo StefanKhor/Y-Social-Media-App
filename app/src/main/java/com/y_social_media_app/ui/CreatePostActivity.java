@@ -12,6 +12,8 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -19,19 +21,27 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
+import com.google.firebase.storage.UploadTask;
 import com.y_social_media_app.databinding.ActivityCreatePostBinding;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 public class CreatePostActivity extends AppCompatActivity {
+
+    StorageReference storageReference, ref;
 
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
@@ -53,6 +63,7 @@ public class CreatePostActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
+        storageReference = FirebaseStorage.getInstance("gs://y-social-media-app.appspot.com").getReference();
 
         cameraPermission = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         storagePermission = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -98,25 +109,32 @@ public class CreatePostActivity extends AppCompatActivity {
         hashMap.put("comment", "0");
 
         Toast.makeText(CreatePostActivity.this, "Publishing Post", Toast.LENGTH_SHORT).show();
-
-        firebaseDatabase = FirebaseDatabase.getInstance("https://y-social-media-app-default-rtdb.asia-southeast1.firebasedatabase.app");
-        databaseReference = firebaseDatabase.getReference("Posts");
-
-        String postID = databaseReference.push().getKey();
-        if (postID != null) {
-            databaseReference
-                    .child(postID)
-                    .setValue(hashMap)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+        if(imageUri != null && !imageUri.equals(Uri.EMPTY)){
+            String randomUUID = UUID.randomUUID().toString();
+            ref = storageReference.child("PostImages/" + firebaseUser.getUid()+ "/" + randomUUID);
+            ref.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Toast.makeText(CreatePostActivity.this, "Image Uploaded", Toast.LENGTH_SHORT).show();
+                    ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
-                        public void onSuccess(Void unused) {
-                            Toast.makeText(CreatePostActivity.this, "Post Successfully Uploaded", Toast.LENGTH_SHORT).show();
-                            binding.postTitleInput.setText("");
-                            binding.postDescriptionInput.setText("");
-                            finish();
+                        public void onSuccess(Uri uri) {
+                            hashMap.put("postImage", uri.toString());
+                            savePostToDatabase(hashMap);
                         }
-                    })
-                    .addOnFailureListener(e -> Toast.makeText(CreatePostActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show());
+                    });
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    hashMap.put("postImage", "NoImage");
+                    Toast.makeText(CreatePostActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+        else {
+            hashMap.put("postImage", "NoImage");
+            savePostToDatabase(hashMap);
         }
     }
 
@@ -138,5 +156,41 @@ public class CreatePostActivity extends AppCompatActivity {
         intent.setAction(Intent.ACTION_GET_CONTENT);
 
         startActivityForResult(intent,1000);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
+        if (requestCode == 1000 && resultCode == RESULT_OK
+                && data != null && data.getData() != null){
+            imageUri = data.getData();
+            binding.uploadImage.setVisibility(View.GONE);
+            binding.postImageResult.setVisibility(View.VISIBLE);
+            Glide.with(this).load(imageUri).into(binding.postImageResult);
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void savePostToDatabase(HashMap<Object, String> hashMap){
+        firebaseDatabase = FirebaseDatabase.getInstance("https://y-social-media-app-default-rtdb.asia-southeast1.firebasedatabase.app");
+        databaseReference = firebaseDatabase.getReference("Posts");
+
+        String postID = databaseReference.push().getKey();
+        if (postID != null) {
+            databaseReference
+                    .child(postID)
+                    .setValue(hashMap)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            Toast.makeText(CreatePostActivity.this, "Post Successfully Uploaded", Toast.LENGTH_SHORT).show();
+                            binding.postTitleInput.setText("");
+                            binding.postDescriptionInput.setText("");
+                            finish();
+                        }
+                    })
+                    .addOnFailureListener(e -> Toast.makeText(CreatePostActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show());
+        }
     }
 }
