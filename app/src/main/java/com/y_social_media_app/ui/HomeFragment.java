@@ -29,6 +29,7 @@ import com.y_social_media_app.databinding.FragmentProfileBinding;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 
 public class HomeFragment extends Fragment {
@@ -52,36 +53,35 @@ public class HomeFragment extends Fragment {
         RecyclerView recyclerView = binding.homeRecyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         allPosts = new ArrayList<>();
-        loadPost();
+        getPost();
         // Inflate the layout for this fragment
         return binding.getRoot();
     }
-    private void loadPost(){
+    private void getPost(){
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance("https://y-social-media-app-default-rtdb.asia-southeast1.firebasedatabase.app");
         DatabaseReference postsRef = firebaseDatabase.getReference("Posts");
-
         Query query = postsRef.orderByChild("timestamp");
         query.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
 
+                        allPosts.clear();
+
                         for (DataSnapshot post: snapshot.getChildren()){
                             System.out.println(post.toString());
                             ModalPost modalPost = post.getValue(ModalPost.class);
                             allPosts.add(modalPost);
-                            binding.homeRecyclerView.setAdapter(
-                                    new PostAdapter(getContext(), allPosts) {
-                                    }
-                            );
                         }
+
+                        Collections.reverse(allPosts);
+
+                        binding.homeRecyclerView.setAdapter(new PostAdapter(getContext(), allPosts) {});
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
                         Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
-
-
                 });
 
     }
