@@ -107,6 +107,16 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        binding.logoutButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                firebaseAuth.signOut();
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                startActivity(intent);
+                getActivity().finish();
+            }
+        });
+
         // Initialize RecyclerView and set LayoutManager
         RecyclerView recyclerView = binding.ownPostRecyclerview;
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

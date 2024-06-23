@@ -62,10 +62,8 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
-                    Toast.makeText(RegisterActivity.this, "Registration Successful", Toast.LENGTH_SHORT).show();
                     FirebaseUser user = mAuth.getCurrentUser();
                     if (user != null) {
-                        // User is null, handle accordingly
                         String email = user.getEmail();
                         HashMap<Object, String> hashMap = new HashMap<>();
                         hashMap.put("email", email);
@@ -79,7 +77,6 @@ public class RegisterActivity extends AppCompatActivity {
                         DatabaseReference reference = database.getReference("Users");
                         reference.child(user.getUid()).setValue(hashMap);
                         Toast.makeText(RegisterActivity.this, "Register Successful", Toast.LENGTH_SHORT).show();
-
                         FirebaseAuth.getInstance().signOut();
                         navigateToLogin();
                     }
