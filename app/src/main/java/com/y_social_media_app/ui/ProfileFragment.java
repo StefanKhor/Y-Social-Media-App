@@ -79,15 +79,19 @@ public class ProfileFragment extends Fragment {
                         binding.profileBio.setText(bio);
                     }
                     if (!profileImageURL.isEmpty()) {
-                        Glide.with(ProfileFragment.this)
-                                .load(profileImageURL)
-                                .into(binding.profileFragmentProfileImage);
+                        if (getActivity() != null) {
+                            Glide.with(getActivity())
+                                    .load(profileImageURL)
+                                    .into(binding.profileFragmentProfileImage);
+                        }
                     }
 
                     if (!coverImageURL.isEmpty()) {
-                        Glide.with(ProfileFragment.this)
-                                .load(coverImageURL)
-                                .into(binding.profileFragmentProfileCoverImage);
+                        if (getActivity() != null) {
+                            Glide.with(getActivity())
+                                    .load(coverImageURL)
+                                    .into(binding.profileFragmentProfileCoverImage);
+                        }
                     }
                 }
             }

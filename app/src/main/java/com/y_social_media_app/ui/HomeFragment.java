@@ -58,6 +58,7 @@ public class HomeFragment extends Fragment {
         return binding.getRoot();
     }
     private void getPost(){
+        binding.homeProgressBar.setVisibility(View.VISIBLE);
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance("https://y-social-media-app-default-rtdb.asia-southeast1.firebasedatabase.app");
         DatabaseReference postsRef = firebaseDatabase.getReference("Posts");
         Query query = postsRef.orderByChild("timestamp");
@@ -75,11 +76,14 @@ public class HomeFragment extends Fragment {
 
                         Collections.reverse(allPosts);
 
+                        binding.homeProgressBar.setVisibility(View.GONE);
+
                         binding.homeRecyclerView.setAdapter(new PostAdapter(getContext(), allPosts) {});
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
+                        binding.homeProgressBar.setVisibility(View.GONE);
                         Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
