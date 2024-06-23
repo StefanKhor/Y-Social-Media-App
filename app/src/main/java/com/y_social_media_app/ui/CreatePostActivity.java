@@ -61,7 +61,7 @@ public class CreatePostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(CreatePostActivity.this, "Pick An Image", Toast.LENGTH_SHORT).show();
-                pickImageDialog();
+                openFileChooser();
             }
         });
 
@@ -120,55 +120,6 @@ public class CreatePostActivity extends AppCompatActivity {
         }
     }
 
-    private void pickImageDialog(){
-        String[] option = {"Camera", "Gallery"};
-        AlertDialog.Builder dialog = new AlertDialog.Builder(CreatePostActivity.this);
-        dialog.setTitle("Please select an image");
-        dialog.setItems(option, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (which == 0){
-                    if (checkCameraPermission() && checkStoragePermission()){
-                        Toast.makeText(CreatePostActivity.this, "Getting Camera Ready", Toast.LENGTH_SHORT).show();
-                        getCamera();
-                    }
-                    else {
-                        requestPermissions(cameraPermission, 100);
-                        requestPermissions(storagePermission, 200);
-                    }
-                }
-                else {
-                    if (checkStoragePermission()){
-                    }
-                }
-            }
-        });
-        dialog.create().show();
-    }
-
-
-
-    ///  Check camera and storage permission if user choose to use camera
-    private Boolean checkCameraPermission(){
-        return ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA ) == (PackageManager.PERMISSION_GRANTED);
-    }
-
-    ///  Check camera and storage permission if user choose to use camera
-    private Boolean checkStoragePermission(){
-        return ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE ) == (PackageManager.PERMISSION_GRANTED);
-    }
-
-    //    get the image and pass to startactivityforresult
-    private void getCamera(){
-        Toast.makeText(CreatePostActivity.this, "Camera", Toast.LENGTH_SHORT).show();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(MediaStore.Images.Media.TITLE, "Temp Image");
-        contentValues.put(MediaStore.Images.Media.DESCRIPTION, "Temp Image To Upload");
-        imageUri = this.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivity(intent);
-    }
-
     private Boolean validateForm(String title, String description){
         if (title.isEmpty()){
             Toast.makeText(CreatePostActivity.this, "Title Cannot Be Empty", Toast.LENGTH_SHORT).show();
@@ -179,5 +130,13 @@ public class CreatePostActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    private void openFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+
+        startActivityForResult(intent,1000);
     }
 }
