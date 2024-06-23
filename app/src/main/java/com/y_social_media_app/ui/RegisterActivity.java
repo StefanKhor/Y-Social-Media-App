@@ -75,11 +75,9 @@ public class RegisterActivity extends AppCompatActivity {
                         hashMap.put("bio", "");
                         hashMap.put("profileImageURL", "");
                         hashMap.put("coverImageURL", "");
-                        FirebaseDatabase database = FirebaseDatabase.getInstance();
+                        FirebaseDatabase database = FirebaseDatabase.getInstance("https://y-social-media-app-default-rtdb.asia-southeast1.firebasedatabase.app");
                         DatabaseReference reference = database.getReference("Users");
                         reference.child(user.getUid()).setValue(hashMap);
-                        Toast.makeText(RegisterActivity.this, "Register Successful", Toast.LENGTH_SHORT).show();
-
                         FirebaseAuth.getInstance().signOut();
                         navigateToLogin();
                     }
