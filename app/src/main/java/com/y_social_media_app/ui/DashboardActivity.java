@@ -33,6 +33,10 @@ public class DashboardActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         binding.navigationView.setSelectedItemId(R.id.navigation_home);
+        HomeFragment homeFragment = new HomeFragment();
+        FragmentTransaction homeFragmentTransaction = getSupportFragmentManager().beginTransaction();
+        homeFragmentTransaction.replace(R.id.content, homeFragment);
+        homeFragmentTransaction.commit();
 
         binding.navigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
