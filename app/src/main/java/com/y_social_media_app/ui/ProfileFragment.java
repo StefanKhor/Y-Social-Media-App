@@ -96,9 +96,6 @@ public class ProfileFragment extends Fragment {
             query.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if (getActivity() == null) {
-                        return;
-                    }
                     if (dataSnapshot.exists()){
 //                  //  Get data from database
                         String username = "" + dataSnapshot.child("username").getValue();
@@ -114,15 +111,17 @@ public class ProfileFragment extends Fragment {
                             binding.profileBio.setText(bio);
                         }
                         if (!profileImageURL.isEmpty()) {
+                          if(getActivity!= null){
                             Glide.with(ProfileFragment.this)
                                     .load(profileImageURL)
-                                    .into(binding.profileFragmentProfileImage);
+                                    .into(binding.profileFragmentProfileImage);}
                         }
 
                         if (!coverImageURL.isEmpty()) {
+                          if(getActivity!= null){
                             Glide.with(ProfileFragment.this)
                                     .load(coverImageURL)
-                                    .into(binding.profileFragmentProfileCoverImage);
+                                    .into(binding.profileFragmentProfileCoverImage);}
                         }
                     }
                 }

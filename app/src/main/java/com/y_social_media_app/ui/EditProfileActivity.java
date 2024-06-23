@@ -87,13 +87,13 @@ public class EditProfileActivity extends AppCompatActivity {
                     username.setText(dataSnapshot.child("username").getValue().toString());
                     bio.setText(dataSnapshot.child("bio").getValue().toString());
                     if (!profileImageURL.isEmpty()) {
-                        Glide.with(EditProfileActivity.this)
+                        Glide.with(getApplicationContext())
                                 .load(profileImageURL)
                                 .into(profileImage);
                     }
 
                     if (!coverImageURL.isEmpty()) {
-                        Glide.with(EditProfileActivity.this)
+                        Glide.with(getApplicationContext())
                                 .load(coverImageURL)
                                 .into(coverImage);
                     }
