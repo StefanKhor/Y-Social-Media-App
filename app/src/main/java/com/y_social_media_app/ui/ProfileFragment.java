@@ -99,7 +99,7 @@ public class ProfileFragment extends Fragment {
                     if (dataSnapshot.exists()){
 //                  //  Get data from database
                         String username = "" + dataSnapshot.child("username").getValue();
-                        String handler = "" + dataSnapshot.child("handler").getValue();
+                        String handler = "@" + dataSnapshot.child("handler").getValue();
                         String bio = "" + dataSnapshot.child("bio").getValue();
                         String profileImageURL = "" + dataSnapshot.child("profileImageURL").getValue();
                         String coverImageURL = "" + dataSnapshot.child("coverImageURL").getValue();
